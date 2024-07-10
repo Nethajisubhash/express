@@ -1,6 +1,24 @@
 const express=require('express')
+const mysql=require('mysql2')
 const app=express()
-app.get('/',function(req,res){
-    res.send("this is my express program")
+const db=mysql.createConnection({
+    host:'localhost',
+    user:'root',
+    password:'root',
+    database:'aits'
 })
-app.listen(8082)
+db.connect(function(error){
+    if(error){
+        console.log("connection unsuccessfull");
+    }
+    else{
+        console.log("connection successfull")
+    }
+})
+const selectQuery='select * from employee';
+app.get('/get_users',function(req,res){
+    db.query('select * from employee',function(err,result){
+        res.json(result);
+    })
+})
+app.listen(8084)
